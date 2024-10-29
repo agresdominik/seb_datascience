@@ -1,0 +1,11 @@
+groups:
+- name: pushgateway-alerts
+  rules:
+  - alert: PushgatewayNoScrape
+    expr: absent(up{job="pushgateway"}) OR up{job="pushgateway"} == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Pushgateway has not been scraped for 30 minutes"
+      description: "No new data has been received from the Pushgateway for the last 30 minutes."

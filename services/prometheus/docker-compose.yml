@@ -6,9 +6,17 @@ services:
         volumes:
           - "/project/seb_datasience/services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
           - "/project/seb_datasience/services/prometheus/services-data:/prometheus"
-        restart: always
+          - "/project/seb_datasience/services/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml"
+        restart: unless-stopped
     pushgateway:
         image: prom/pushgateway
         user: "1000:1003"
         network_mode: host
-        restart: always
+        restart: unless-stopped
+    alertmanager:
+        image: prom/alertmanager
+        user: "1000:1003"
+        network_mode: host
+        volumes:
+          - "/project/seb_datasience/services/prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+        restart: unless-stopped

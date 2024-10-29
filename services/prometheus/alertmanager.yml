@@ -1,0 +1,20 @@
+global:
+ resolve_timeout: 1m
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  receiver: 'email-notifications'
+
+receivers:
+- name: 'email-notifications'
+  email_configs:
+  - to: agres.dominik@gmail.com
+    from: agres.alert@gmail.com
+    smarthost: smtp.gmail.com:587
+    auth_username: agres.alert@gmail.com
+    auth_identity: agres.alert@gmail.com
+    auth_password: ''
+    send_resolved: true
