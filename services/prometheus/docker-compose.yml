@@ -2,8 +2,7 @@ services:
     prometheus:
         image: prom/prometheus
         user: "1000:1003"
-        ports:
-          - "9090:9090"
+        network_mode: host
         volumes:
           - "/project/seb_datasience/services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
           - "/project/seb_datasience/services/prometheus/services-data:/prometheus"
@@ -11,6 +10,5 @@ services:
     pushgateway:
         image: prom/pushgateway
         user: "1000:1003"
-        ports:
-          - "9091:9091"
+        network_mode: host
         restart: always
