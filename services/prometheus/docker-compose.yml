@@ -1,9 +1,10 @@
 services:
     prometheus:
         image: prom/prometheus
+        user: "1000:1003"
         ports:
           - "9090:9090"
         volumes:
           - "/project/seb_datasience/services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
-          - "/project/seb_datasience/services/prometheus/prometheus-data:/prometheus"
-        
+          - "/project/seb_datasience/services/prometheus/services-data:/prometheus"
+        restart: always
