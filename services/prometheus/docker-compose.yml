@@ -8,3 +8,9 @@ services:
           - "/project/seb_datasience/services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
           - "/project/seb_datasience/services/prometheus/services-data:/prometheus"
         restart: always
+    pushgateway:
+        image: prom/pushgateway
+        user: "1000:1003"
+        ports:
+          - "9091:9091"
+        restart: always
