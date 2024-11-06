@@ -3,9 +3,9 @@ groups:
   rules:
   - alert: PushgatewayNoScrape
     expr: absent(up{job="pushgateway"}) OR up{job="pushgateway"} == 0
-    for: 1m
+    for: 15m
     labels:
       severity: critical
     annotations:
-      summary: "Pushgateway has not been scraped for 30 minutes"
-      description: "No new data has been received from the Pushgateway for the last 30 minutes."
+      summary: "Pushgateway has not been scraped for 15 minutes"
+      description: "No new data has been received from the Pushgateway for the last 15 minutes. This means the service could be down"

@@ -1,0 +1,12 @@
+services:
+    homeassistant:
+        image: homeassistant/home-assistant
+        user: "1000:1003"
+        container_name: homeassistant
+        restart: unless-stopped
+        volumes:
+          - /project/seb_datasience/services/homeassistant/services-data:/config
+          - /etc/localtime:/etc/localtime:ro
+          - /run/dbus:/run/dbus:ro
+        network_mode: host
+        

@@ -1,0 +1,10 @@
+services:
+    grafana:
+        image: grafana/grafana-enterprise
+        user: "1000:1003"
+        container_name: grafana
+        restart: unless-stopped
+        volumes: 
+          - /project/seb_datasience/services/grafana/services-data:/var/lib/grafana
+        ports:
+          - 3000:3000
