@@ -5,7 +5,7 @@ services:
         container_name: homeassistant
         restart: unless-stopped
         volumes:
-          - /project/seb_datasience/services/homeassistant/services-data:/config
+          - /project/seb_datascience/services/homeassistant/services-data:/config
           - /etc/localtime:/etc/localtime:ro
           - /run/dbus:/run/dbus:ro
         network_mode: host
