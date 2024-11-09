@@ -2,6 +2,7 @@ import logging
 import os
 import shutil
 
+
 def rotate_log_file(log_file_path, backup_log_file_path):
     if os.path.exists(log_file_path):
         if os.path.exists(backup_log_file_path):

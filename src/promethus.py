@@ -1,10 +1,14 @@
 from prometheus_client import CollectorRegistry, Gauge, push_to_gateway
 
+from enviroment import (
+    PUSHGATEWAY_URL
+)
+
 
 def push_to_promethus_gateway(value: any, value_name: str):
 
     # Pushgateway details
-    #pushgateway_endpoint = "http://localhost:9091"
+    #pushgateway_endpoint = PUSHGATEWAY_URL
     pushgateway_endpoint = ""
     job_name = "raspberry_pi_sensor_data"
 

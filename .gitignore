@@ -1,3 +1,5 @@
 **/services-data/
 **/__pycache__/
+**/env/
+**/venv/
 *.key

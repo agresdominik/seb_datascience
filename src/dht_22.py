@@ -12,7 +12,6 @@ from logger import logger
 def readout_dht22():
 
     logger.info("Starting dht function")
-
     dht_sensor = adafruit_dht.DHT22(DHT_22_PIN)
 
     try:
