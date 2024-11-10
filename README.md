@@ -11,7 +11,7 @@
     $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-### Python:
+### Python (Version 3.11.2):
 
     sudo apt install python3 python3-pip
 
