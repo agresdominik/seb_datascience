@@ -8,7 +8,7 @@ from enviroment import (
 )
 
 
-def push_to_promethus_gateway(value: int, value_name: PrometheusValueName, job_name: PrometheusJobName, instance_name: PrometheusInstanceName, value_description = ""):
+def push_to_promethus_gateway(value: int, value_name: PrometheusValueName, job_name: PrometheusJobName, instance_name: PrometheusInstanceName, value_description = "") -> None:
     """
     :param: value Is the Integer containig the value passed e.g. 23 for 23 Degrees Celsium Temperature
     :param: value_name Is the Name of the value, in our case this would be "Temperature", "Humidity" etc.

@@ -3,7 +3,7 @@ import os
 import shutil
 
 
-def rotate_log_file(log_file_path, backup_log_file_path, log_folder_path):
+def rotate_log_file(log_file_path, backup_log_file_path, log_folder_path) -> None:
     if os.path.exists(log_folder_path):
         if os.path.exists(backup_log_file_path):
             with open(backup_log_file_path, 'w'):
