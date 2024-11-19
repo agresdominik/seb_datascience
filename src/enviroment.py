@@ -1,11 +1,6 @@
-import board
 from enum import Enum
 
-DHT_22_PIN = board.D4
-AIR_QUALITY_SENSOR_PIN = ""
-PHOTOSENSOR_PIN = ""
-
-PUSHGATEWAY_URL="http://localhost:9091"
+PUSHGATEWAY_URL="http://192.168.0.222:9091"
 
 class PrometheusValueName(Enum):
     TEMPERATURE = "temperature"

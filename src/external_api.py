@@ -1,41 +1,33 @@
 import requests
-
-from enviroment import (
-    PrometheusValueName,
-    PrometheusInstanceName,
-    PrometheusJobName
-)
 from logger import logger
-from promethus import push_to_promethus_gateway
 
 
-def main():
-    push_weather_data_to_prometheus()
-
-
-def push_weather_data_to_prometheus() -> None:
-
-    weather_data_json = get_weather_from_api()
+def get_public_weather_data() -> list:
+    weather_data_json = _get_weather_from_api()
     if weather_data_json:
-        temperature_celsius = weather_data_json['main']['temp']
-        humidity_celsius = weather_data_json['main']['humidity']
-        cloud_coverage = weather_data_json['clouds']['all']
-        push_to_promethus_gateway(temperature_celsius, PrometheusValueName.TEMPERATURE, PrometheusJobName.WEATHER_API, PrometheusInstanceName.OPENWEATHERMAP)
-        push_to_promethus_gateway(humidity_celsius, PrometheusValueName.HUMIDITY, PrometheusJobName.WEATHER_API, PrometheusInstanceName.OPENWEATHERMAP)
-        push_to_promethus_gateway(cloud_coverage, PrometheusValueName.CLOUD_COVERAGE, PrometheusJobName.WEATHER_API, PrometheusInstanceName.OPENWEATHERMAP)
+        try:
+            temperature_celsius = weather_data_json['main']['temp']
+            humidity_celsius = weather_data_json['main']['humidity']
+            cloud_coverage = weather_data_json['clouds']['all']
+            return [temperature_celsius, humidity_celsius, cloud_coverage]
+        except:
+            logger.error("An error raised while parsing API Weather data and sending it to Prometheus")
+            return [0, 0, 0]
+    else:
+        logger.error("Returned weather data was null.")
+        return [0, 0, 0]
 
 
+def _get_weather_from_api(units = "metric") -> any:
 
-def get_weather_from_api(units = "metric") -> any:
-
-    api_key = get_key("api_key.key")
+    api_key = _get_key("api_key.key")
 
     url = f"https://api.openweathermap.org/data/2.5/weather?lat=49.15&lon=9.21&appid={api_key}&units={units}"
     
     try:
         connection_api = requests.get(url)
         if connection_api.status_code == 200:
-            logger.info(f"Connection to {url} was successfull with code {connection_api.status_code}")
+            logger.debug(f"Connection to {url} was successfull with code {connection_api.status_code}")
             returned_data_json = connection_api.json()
             return returned_data_json
         else:
@@ -46,7 +38,7 @@ def get_weather_from_api(units = "metric") -> any:
         return None
 
 
-def get_key(key_filename: str) -> str | None:
+def _get_key(key_filename: str) -> str | None:
     try:
         with open(key_filename, "r") as file:
             for line in file:
@@ -60,7 +52,3 @@ def get_key(key_filename: str) -> str | None:
         return None
     except TypeError or AttributeError:
         logger.error(f"The API Key was not parsed correctly and was not passed a String")
-
-
-if __name__ == "__main__":
-    main()
