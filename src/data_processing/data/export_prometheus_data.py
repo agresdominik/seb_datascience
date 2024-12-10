@@ -2,10 +2,7 @@ import requests
 import csv
 from datetime import datetime, timedelta
 
-# Prometheus server URL
 PROMETHEUS_URL = "http://192.168.0.222:9090/api/v1/query_range"
-
-# Define the metric and the instances
 METRIC_NAME = "temperature"
 INSTANCES = ["raspberry_pi", "openweathermap"]
 
@@ -41,11 +38,9 @@ def query_prometheus(instance):
         data = response.json()
         big_data.append(data)
 
-    #data = response.json()
     return big_data
 
 def write_to_csv(instance, big_data):
-    """Write the Prometheus data to a CSV file."""
     file_name = f"{instance}_temperature.csv"
     with open(file_name, mode="w", newline="") as file:
         writer = csv.writer(file)

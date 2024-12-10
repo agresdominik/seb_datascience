@@ -1,7 +1,4 @@
 import pandas as pd
-import numpy as np
-import csv
-from scipy.stats import iqr
 
 
 def main():
@@ -42,25 +39,26 @@ def main():
     """
 
     window_open_times = [
-        ('2024-12-01 22:15:00', '2024-12-01 22:45:00'),
-        ('2024-12-02 11:05:00', '2024-12-02 11:35:00'),
-        ('2024-12-03 18:10:00', '2024-12-03 18:40:00'),
-        ('2024-12-04 07:27:00', '2024-12-04 07:57:00'),
-        ('2024-12-05 21:20:00', '2024-12-05 21:50:00'),
-        ('2024-12-06 06:59:00', '2024-12-06 07:29:00'),
-        ('2024-12-06 13:51:00', '2024-12-06 14:21:00'),
-        ('2024-12-07 05:35:00', '2024-12-07 06:05:00'),
-        ('2024-12-08 08:06:30', '2024-12-08 08:36:30'),
-        ('2024-12-08 17:25:30', '2024-12-08 17:55:30'),
-        ('2024-12-09 22:00:00', '2024-12-09 22:30:00'),
-        ('2024-12-10 06:32:00', '2024-12-10 07:02:00'),
-        ('2024-12-10 17:08:00', '2024-12-10 17:38:00')
+        ('2024-12-01 22:00:00'),
+        ('2024-12-02 11:05:00'),
+        ('2024-12-03 18:10:00'),
+        ('2024-12-04 07:27:00'),
+        ('2024-12-05 21:20:00'),
+        ('2024-12-06 06:59:00'),
+        ('2024-12-06 13:51:00'),
+        ('2024-12-07 05:35:00'),
+        ('2024-12-08 08:06:00'),
+        ('2024-12-08 17:25:00'),
+        ('2024-12-09 22:00:00'),
+        ('2024-12-10 06:32:00'),
+        ('2024-12-10 17:08:00'),
+        ('2024-12-10 21:15:15')
     ]
 
 
     results = []
 
-    for start, end in window_open_times:
+    for start in window_open_times:
         try:
             start_time = pd.to_datetime(start)
             temp_at_start = data.loc[data['Time'] == start_time, 'Temperature_inside'].values[0]
@@ -74,15 +72,16 @@ def main():
             temp_difference_at_start = temp_at_start - outside_temp_at_start
             temp_difference_at_end = temp_after_30_min - outside_temp_after_30_min
             average_temp_difference = (temp_difference_at_start + temp_difference_at_end) / 2
-            results.append({'start_time': start, 'drop_after_30_min': temp_drop, 'temp_difference_at_start': temp_difference_at_start, 'temp_difference_at_end': temp_difference_at_end, 'average_temp_difference': average_temp_difference, 'temp_at_start': temp_at_start, 'temp_after_30_min': temp_after_30_min, 'outside_temp_at_start': outside_temp_at_start, 'outside_temp_after_30_min': outside_temp_after_30_min})
+            cooling_rate = (temp_difference_at_start - temp_difference_at_end) / 30
+            results.append({'start_time': start, 'drop_after_30_min': temp_drop, 'temp_difference_at_start': temp_difference_at_start, 'temp_difference_at_end': temp_difference_at_end, 'average_temp_difference': average_temp_difference, 'temp_at_start': temp_at_start, 'temp_after_30_min': temp_after_30_min, 'outside_temp_at_start': outside_temp_at_start, 'outside_temp_after_30_min': outside_temp_after_30_min, 'cooling_rate': cooling_rate})
         except Exception as e:
+            data.to_csv("error_dump.csv", index=False)
             print(f"Error processing data for window open time: {start}, Exception: {e}")
     
     results_df = pd.DataFrame(results)
     print(results_df.to_string())
 
-    file_name = f"analasys_output.csv"
-
+    file_name = f"analasys_output_ver_2.csv"
     results_df.to_csv(file_name, index=False)
 
 
@@ -105,10 +104,6 @@ def read_collected_data() -> list[pd.DataFrame, pd.DataFrame]:
     outside_temp_data['Temperature'] = outside_temp_data['Temperature'].str.replace(' °C', '', regex=False).str.strip()
     outside_temp_data['Temperature'] = pd.to_numeric(outside_temp_data['Temperature'], errors='coerce')
 
-    #print(inside_temp_data.head())
-    #duplicate_indices = outside_temp_data[outside_temp_data['Time'].duplicated(keep=False)].index
-    #print(duplicate_indices)  # Count duplicates in the 'Time' column
-
     outside_temp_data = outside_temp_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
     inside_temp_data = inside_temp_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
 
@@ -128,8 +123,8 @@ def normalize_data(data_frame: pd.DataFrame, file_type: str, data_source: str) -
     else:
         raise ValueError("Invalid file type")
 
-    lower_threshold = data_frame[value].quantile(0.1 / 100)
-    upper_threshold = data_frame[value].quantile(99.9 / 100)
+    lower_threshold = data_frame[value].quantile(0.01 / 100)
+    upper_threshold = data_frame[value].quantile(99.99 / 100)
 
 
     df_filtered = data_frame[(data_frame[value] >= lower_threshold) & (data_frame[value] <= upper_threshold)]
@@ -138,7 +133,7 @@ def normalize_data(data_frame: pd.DataFrame, file_type: str, data_source: str) -
     df_filtered = df_filtered.set_index('Time').resample('1T').interpolate('linear').reset_index()
 
     #print(df_filtered.to_string())
-    #print(removed_data.to_string())
+    #print("Removed data:" + removed_data.to_string())
     return df_filtered
 
 
