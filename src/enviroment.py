@@ -1,5 +1,10 @@
 from enum import Enum
+import os
 
+KEY_FILE_PATH = os.path.join(os.path.dirname(os.path.realpath(__file__)),"api_key.key")
+
+I2C_BUS: int     = 0x01  # default use I2C1 bus
+I2C_DHT_ADDRESS: int = 0x38  # I2C Address for DHT20
 PUSHGATEWAY_URL="http://192.168.0.222:9091"
 
 class PrometheusValueName(Enum):

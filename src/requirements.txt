@@ -4,3 +4,5 @@ prometheus-client==0.21.0
 requests==2.32.3
 smbus2==0.5.0
 adafruit_ads1x15==1.0.2
+pandas==2.1.1
+numpy==1.25.2

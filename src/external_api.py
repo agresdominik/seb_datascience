@@ -1,4 +1,9 @@
 import requests
+import os
+from enviroment import (
+    KEY_FILE_PATH
+)
+from customExceptions import DataMissingPublicAPIError
 from logger import logger
 
 
@@ -12,15 +17,15 @@ def get_public_weather_data() -> list:
             return [temperature_celsius, humidity_celsius, cloud_coverage]
         except:
             logger.error("An error raised while parsing API Weather data and sending it to Prometheus")
-            return [0, 0, 0]
+            raise DataMissingPublicAPIError
     else:
         logger.error("Returned weather data was null.")
-        return [0, 0, 0]
+        raise DataMissingPublicAPIError
 
 
 def _get_weather_from_api(units = "metric") -> any:
 
-    api_key = _get_key("api_key.key")
+    api_key = _get_key()
 
     url = f"https://api.openweathermap.org/data/2.5/weather?lat=49.15&lon=9.21&appid={api_key}&units={units}"
     
@@ -38,17 +43,17 @@ def _get_weather_from_api(units = "metric") -> any:
         return None
 
 
-def _get_key(key_filename: str) -> str | None:
+def _get_key() -> str | None:
     try:
-        with open(key_filename, "r") as file:
+        with open(KEY_FILE_PATH, "r") as file:
             for line in file:
                 line = line.strip()
                 if line.startswith("api_key="):
                     return line.split("=", 1)[1].strip()
-        logger.error(f"The api key file {key_filename} contains no api_key= line. No key was found")
+        logger.error(f"The api key file {KEY_FILE_PATH} contains no api_key= line. No key was found")
         return None
     except FileNotFoundError:
-        logger.error(f"The API Key file {key_filename} was not found.")
+        logger.error(f"The API Key file {KEY_FILE_PATH} was not found.")
         return None
     except TypeError or AttributeError:
         logger.error(f"The API Key was not parsed correctly and was not passed a String")
