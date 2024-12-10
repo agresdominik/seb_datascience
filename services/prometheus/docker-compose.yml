@@ -7,6 +7,10 @@ services:
           - "/project/seb_datascience/services/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
           - "/project/seb_datascience/services/prometheus/services-data:/prometheus"
           - "/project/seb_datascience/services/prometheus/alert.rules.yml:/etc/prometheus/alert.rules.yml"
+        command:
+          - '--config.file=/etc/prometheus/prometheus.yml'
+          - '--storage.tsdb.path=/prometheus'
+          - '--storage.tsdb.retention.time=180d'
         restart: unless-stopped
     pushgateway:
         image: prom/pushgateway
