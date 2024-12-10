@@ -3,3 +3,4 @@
 **/env/
 **/venv/
 *.key
+**/data_processing_copy/
