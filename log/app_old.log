@@ -1,3 +1,0 @@
-2024-12-03 07:05:17,630 - CRITICAL - Connection to https://api.openweathermap.org/data/2.5/weather?lat=49.15&lon=9.21&appid=8835ebfe28f356c4b8b2b928a9898fc6&units=metric could not be established. Error: HTTPSConnectionPool(host='api.openweathermap.org', port=443): Max retries exceeded with url: /data/2.5/weather?lat=49.15&lon=9.21&appid=8835ebfe28f356c4b8b2b928a9898fc6&units=metric (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0xf681ebb0>, 'Connection to api.openweathermap.org timed out. (connect timeout=None)'))
-2024-12-03 07:05:17,631 - ERROR - Returned weather data was null.
-2024-12-03 07:05:17,631 - ERROR - API returned no value. Error: <class 'customExceptions.DataMissingPublicAPIError'>
