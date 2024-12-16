@@ -1,4 +1,5 @@
 import pandas as pd
+from datetime import datetime
 
 
 def main():
@@ -52,9 +53,14 @@ def main():
         ('2024-12-09 22:00:00'),
         ('2024-12-10 06:32:00'),
         ('2024-12-10 17:08:00'),
-        ('2024-12-10 21:15:15')
+        ('2024-12-10 20:15:00'),
+        ('2024-12-10 22:27:00'),
+        ('2024-12-11 07:30:00'),
+        ('2024-12-11 09:15:00'),
+        ('2024-12-11 12:13:00'),
+        ('2024-12-14 12:45:00'),
+        ('2024-12-15 14:02:00')
     ]
-
 
     results = []
 
@@ -81,7 +87,10 @@ def main():
     results_df = pd.DataFrame(results)
     print(results_df.to_string())
 
-    file_name = f"analasys_output_ver_2.csv"
+    now = datetime.now()
+    timestamp_str = now.strftime("%Y-%m-%d_%H-%M-%S")
+
+    file_name = f"analasys_output_{timestamp_str}.csv"
     results_df.to_csv(file_name, index=False)
 
 

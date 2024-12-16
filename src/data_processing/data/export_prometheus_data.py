@@ -12,7 +12,7 @@ def query_prometheus(instance):
     big_data = []
     start_time = datetime(2024, 11, 26, 0, 0)
     end_time = datetime(2024, 11, 27, 0, 0)
-    total_end_time = datetime(2024, 12, 11, 00, 00)
+    total_end_time = datetime(2024, 12, 16, 00, 00)
 
     while end_time <= total_end_time:
         params = {
@@ -32,7 +32,7 @@ def query_prometheus(instance):
             print(f"Connection error occurred: {e}")
         except requests.exceptions.Timeout as e:
             print(f"Timeout error occurred: {e}")
-        start_time = end_time + timedelta(seconds=1)
+        start_time = end_time #+ timedelta(seconds=1)
         end_time = end_time + timedelta(days=1)
 
         data = response.json()
@@ -41,6 +41,9 @@ def query_prometheus(instance):
     return big_data
 
 def write_to_csv(instance, big_data):
+
+    last_timestamp = ""
+
     file_name = f"{instance}_temperature.csv"
     with open(file_name, mode="w", newline="") as file:
         writer = csv.writer(file)
@@ -52,6 +55,9 @@ def write_to_csv(instance, big_data):
                 for value in result["values"]:
                     timestamp, temp_value = value
                     time_str = datetime.utcfromtimestamp(float(timestamp)).strftime("%Y-%m-%d %H:%M:%S")
+                    if time_str == last_timestamp:
+                        continue
+                    last_timestamp = time_str
                     writer.writerow([time_str, f"{temp_value} °C"])
     
     print(f"Data written to {file_name}")
