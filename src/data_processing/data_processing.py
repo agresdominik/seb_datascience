@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 
-from env import ( 
+from wOpenTimes import ( 
     WINDOW_OPEN_TIMES
 )
 
