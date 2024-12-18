@@ -11,9 +11,14 @@ def main():
     data_list = read_collected_data()
     inside_temp_data = data_list[0]
     outside_temp_data = data_list[1]
+    outside_humidity_data = data_list[2]
+    inside_humidity_data = data_list[3]
 
     inside_temp_data = normalize_data(inside_temp_data, "temperature")
     outside_temp_data = normalize_data(outside_temp_data, "temperature")
+
+    inside_humidity_data = normalize_data(inside_humidity_data, "humidity")
+    outside_humidity_data = normalize_data(outside_humidity_data, "humidity")
 
     data = pd.merge_asof(inside_temp_data.sort_values('Time'), 
                      outside_temp_data.sort_values('Time'), 
@@ -47,20 +52,18 @@ def main():
     results_df = pd.DataFrame(results)
     results_df = results_df.round(3)
 
-    write_data_to_csv(results_df)
+    write_data_to_csv(results_df, "temperature")
 
 
-def write_data_to_csv(data_frame: pd.DataFrame) -> None:
+def write_data_to_csv(data_frame: pd.DataFrame, type_of_data: str) -> None:
     """
     This function writes the data to a csv file.
     """
-    now = datetime.now()
-    timestamp_str = now.strftime("%Y-%m-%d_%H-%M-%S")
-    file_name = f"analasys_output_{timestamp_str}.csv"
+    file_name = f"analasys_output_{type_of_data}.csv"
     data_frame.to_csv(file_name, index=False)
 
 
-def read_collected_data() -> list[pd.DataFrame, pd.DataFrame]:
+def read_collected_data() -> list[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     This function reads the collected data from the csv files and returns a list of two dataframes.
     The dataframes are labeled, their data is interpolated and resampled to 1 minute intervals.
@@ -78,10 +81,22 @@ def read_collected_data() -> list[pd.DataFrame, pd.DataFrame]:
     outside_temp_data['Temperature'] = outside_temp_data['Temperature'].str.replace(' °C', '', regex=False).str.strip()
     outside_temp_data['Temperature'] = pd.to_numeric(outside_temp_data['Temperature'], errors='coerce')
 
-    outside_temp_data = outside_temp_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
-    inside_temp_data = inside_temp_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
+    inside_humidity_data = pd.read_csv('/project/seb_datascience/src/data_processing/data/inside_humidity.csv', parse_dates=['Time'])
+    inside_humidity_data = inside_humidity_data.iloc[1:].reset_index(drop=True)
+    inside_humidity_data['Humidity'] = inside_humidity_data['Humidity'].str.replace(' %', '', regex=False).str.strip()
+    inside_humidity_data['Humidity'] = pd.to_numeric(inside_humidity_data['Humidity'], errors='coerce')
 
-    data_list = [inside_temp_data, outside_temp_data]
+    outside_humidity_data = pd.read_csv('/project/seb_datascience/src/data_processing/data/outside_humidity.csv', parse_dates=['Time'])
+    outside_humidity_data = outside_humidity_data.iloc[1:].reset_index(drop=True)
+    outside_humidity_data['Humidity'] = outside_humidity_data['Humidity'].str.replace(' %', '', regex=False).str.strip()
+    outside_humidity_data['Humidity'] = pd.to_numeric(outside_humidity_data['Humidity'], errors='coerce')
+
+    #outside_temp_data = outside_temp_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
+    #inside_temp_data = inside_temp_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
+    #inside_humidity_data = inside_humidity_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
+    #outside_humidity_data = outside_humidity_data.set_index('Time').resample('1T').interpolate('linear').reset_index()
+
+    data_list = [inside_temp_data, outside_temp_data, outside_humidity_data, inside_humidity_data]
     return data_list
 
 
