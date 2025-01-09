@@ -1,0 +1,72 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #afafafd6;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #4CAF50;
+    color: white;
+}
+
+header h1 {
+    margin: 0;
+}
+
+main {
+    margin-top: 20px;
+}
+
+.temperature-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.temperature-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 45%;
+    text-align: center;
+}
+
+.temperature-box h2 {
+    margin: 0 0 10px;
+    color: #4CAF50;
+}
+
+.temperature-box p {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.ventilation-container {
+    margin-top: 30px;
+    text-align: center;
+    padding: 15px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ventilation-container h3 {
+    margin: 0 0 10px;
+    color: #4CAF50;
+}
+
+.ventilation-container p {
+    font-size: 1.5rem;
+    color: #555;
+}

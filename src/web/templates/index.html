@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Monitoring</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Room Monitoring</h1>
+        </header>
+        <main>
+            <div class="temperature-container">
+                <div class="temperature-box">
+                    <h2>Room Temperature</h2>
+                    <p><span id="temperature">--</span> °C</p>
+                </div>
+                <div class="temperature-box">
+                    <h2>Outdoor Temperature</h2>
+                    <p><span id="temperature_outside">--</span> °C</p>
+                </div>
+            </div>
+            <div class="ventilation-container">
+                <h3>Recommended Ventilation Time</h3>
+                <p id="window_time">-- minutes</p>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
+    <script src="/static/script.js"></script>
+</body>
+</html>

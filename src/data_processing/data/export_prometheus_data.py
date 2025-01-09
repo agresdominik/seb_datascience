@@ -46,6 +46,7 @@ def query_prometheus(instance: str, metric_name: str):
 
     return big_data
 
+
 def write_to_csv(instance: str, big_data: list, metric_name: str):
 
     if instance == "raspberry_pi":
@@ -80,11 +81,16 @@ def write_to_csv(instance: str, big_data: list, metric_name: str):
     print(f"Data written to {file_name}")
 
 
-for metric_name in METRIC_NAMES:
-    for instance in INSTANCES:
-        try:
-            print(f"Querying data for instance: {instance}")
-            data = query_prometheus(instance, metric_name)
-            write_to_csv(instance, data, metric_name)
-        except Exception as e:
-            print(f"An error occurred for instance {instance}: {e}")
+def main():
+    for metric_name in METRIC_NAMES:
+        for instance in INSTANCES:
+            try:
+                print(f"Querying data for instance: {instance}")
+                data = query_prometheus(instance, metric_name)
+                write_to_csv(instance, data, metric_name)
+            except Exception as e:
+                print(f"An error occurred for instance {instance}: {e}")
+
+
+if __name__ == "__main__":
+    main()
